@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>A Special Surprise For You ♡</title>
+  
+  <!-- Favicon Heart -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
+
+  <!-- Google Fonts: Elegant Display, Handwritten Romantic & Clean Body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient Interactive Background Canvas -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+
+  <!-- Audio Player & Floating Controller -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="assets/music.mpeg" type="audio/mpeg" />
+  </audio>
+  
+  <header class="top-nav" aria-label="Page controls">
+    <div class="progress-pill" id="stage-progress" aria-live="polite">
+      <span class="progress-dot"></span>
+      <span class="progress-text">Prologue</span>
+    </div>
+
+    <button id="music-btn" class="glass-pill music-control" aria-label="Toggle background music">
+      <span class="music-icon" id="music-icon">♫</span>
+      <span class="music-status" id="music-status">Play Music</span>
+      <span class="sound-wave" id="sound-wave" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+  </header>
+
+  <main id="app-container">
+    
+    <!-- ================= STAGE 1: MAGICAL LOADING ================= -->
+    <section id="stage-1" class="stage-section active" aria-label="Stage 1: Welcome">
+      <div class="glass-card glow-box text-center">
+        <div class="sparkle-badge">✨ A Little Moment Just For You ✨</div>
+        <div class="pulsing-heart-wrap" aria-hidden="true">
+          <div class="ambient-pulse"></div>
+          <span class="pulse-icon">♡</span>
+        </div>
+        
+        <h1 class="cursive-sub" id="loading-sub">Something special is being prepared for you...</h1>
+        <p class="tagline fade-in-delay-1" id="loading-reveal">This is for youu ♡</p>
+        
+        <div class="button-group fade-in-delay-2" id="stage-1-action" style="display: none;">
+          <p class="prompt-text">Are you ready?</p>
+          <button class="romantic-btn primary-glow pulse-btn" id="btn-to-stage-2">
+            <span>Open Your Surprise</span>
+            <span class="btn-heart">♡</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 2: CLOSE YOUR EYES ================= -->
+    <section id="stage-2" class="stage-section hidden" aria-label="Stage 2: Preparation">
+      <div class="curtain-overlay" id="curtain-overlay" aria-hidden="true"></div>
+      
+      <div class="glass-card text-center relative-card">
+        <div id="eyes-closed-prompt">
+          <p class="eyebrow">Before we begin...</p>
+          <h2 class="serif-title">Close your eyes for a moment... ♡</h2>
+          <p class="sub-lead">Take a soft breath and let the world pause.</p>
+          <button class="romantic-btn secondary-btn" id="btn-close-eyes">
+            <span>I'M READY</span>
+          </button>
+        </div>
+
+        <div id="eyes-opened-prompt" class="hidden-animated">
+          <div class="glow-star" aria-hidden="true">✨</div>
+          <h2 class="serif-title highlight-text">Okay... now open them ✨</h2>
+          <p class="sub-lead">Your surprise starts now...</p>
+          <button class="romantic-btn primary-glow" id="btn-to-stage-3">
+            <span>Let's Go →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 3: THE SECRET ENVELOPE ================= -->
+    <section id="stage-3" class="stage-section hidden" aria-label="Stage 3: Secret Letter">
+      <div class="glass-card text-center envelope-stage-card">
+        <p class="eyebrow">A quiet whisper</p>
+        <h2 class="serif-title">You have a secret message 💌</h2>
+        
+        <!-- Interactive Envelope -->
+        <div class="envelope-wrapper" id="envelope-interactive" role="button" tabindex="0" aria-label="Open letter envelope">
+          <div class="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-letter" id="envelope-letter">
+              <div class="letter-stamp">♡</div>
+              <p class="letter-body cursive-quote" id="stage-3-quote">
+                "Some people make ordinary days feel special...<br>
+                You make them unforgettable. ♡"
+              </p>
+              <div class="letter-sign" id="letter-sender">Always, With Love</div>
+            </div>
+            <div class="envelope-front"></div>
+            <div class="envelope-flap" id="envelope-flap"></div>
+            <div class="wax-seal" id="wax-seal">
+              <span>Open</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-reveal-area" id="stage-3-action" style="opacity: 0; pointer-events: none;">
+          <button class="romantic-btn primary-glow" id="btn-to-stage-4">
+            <span>There's More... →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 4: MEMORY POLAROID WALL ================= -->
+    <section id="stage-4" class="stage-section hidden" aria-label="Stage 4: Memories">
+      <div class="glass-card polaroid-stage-card text-center">
+        <p class="eyebrow">Cherished Moments</p>
+        <h2 class="serif-title">A few frames of pure magic 📸</h2>
+        <p class="sub-lead">Hover or tap each card to flip a memory</p>
+
+        <div class="polaroid-grid" id="polaroid-grid">
+          <!-- Dynamically populated via script.js -->
+        </div>
+
+        <button class="romantic-btn primary-glow mt-4" id="btn-to-stage-5">
+          <span>One More Surprise →</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 5: INTERACTIVE ROSE BOUQUET ================= -->
+    <section id="stage-5" class="stage-section hidden" aria-label="Stage 5: Rose Garden">
+      <div class="glass-card text-center rose-stage-card">
+        <p class="eyebrow">From the garden</p>
+        <h2 class="serif-title" id="rose-headline">There's something waiting for you...</h2>
+        <p class="sub-lead" id="rose-instruction">Click the bouquet to pick your roses 🌹</p>
+
+        <div id="initial-bouquet-box">
+          <button class="romantic-btn primary-glow pulse-btn" id="btn-reveal-roses">
+            <span>Pick a Rose 🌹</span>
+          </button>
+        </div>
+
+        <!-- Rose picking field -->
+        <div class="roses-container hidden-animated" id="roses-field" role="region" aria-label="Interactive Roses">
+          <div class="roses-flex" id="rose-items-container">
+            <!-- Populated via script.js -->
+          </div>
+          <div class="rose-counter-tag" id="rose-counter-tag">
+            Roses picked: <span id="roses-picked-count">0</span> / <span id="roses-total-count">4</span>
+          </div>
+        </div>
+
+        <!-- Rose Modal / Message Toast -->
+        <div class="rose-reveal-card" id="rose-message-popup" aria-live="polite">
+          <div class="rose-quote-icon">🌹</div>
+          <p class="rose-quote-text cursive-quote" id="rose-quote-text">Your smile is my favorite view.</p>
+        </div>
+
+        <div class="mt-4 hidden-animated" id="stage-5-complete-action">
+          <p class="completed-banner">You found all the little surprises 🌹</p>
+          <button class="romantic-btn primary-glow" id="btn-to-stage-6">
+            <span>But there's still one... →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 6: THE BIRTHDAY CAKE ================= -->
+    <section id="stage-6" class="stage-section hidden" aria-label="Stage 6: Birthday Cake">
+      <div class="glass-card text-center cake-stage-card">
+        <p class="eyebrow">A little tradition</p>
+        <h2 class="serif-title" id="cake-title">Okay... one important thing first.</h2>
+        <p class="sub-lead" id="cake-instruction">Make a wish. 🎂</p>
+
+        <!-- CSS 3D Birthday Cake Container -->
+        <div class="cake-assembly" id="cake-assembly" aria-label="Interactive Birthday Cake">
+          <div class="cake-slice-wrapper" id="cake-slice-wrapper">
+            <!-- Candles -->
+            <div class="candle-row">
+              <div class="candle">
+                <div class="flame" id="flame-1"></div>
+                <div class="smoke" id="smoke-1"></div>
+              </div>
+              <div class="candle">
+                <div class="flame" id="flame-2"></div>
+                <div class="smoke" id="smoke-2"></div>
+              </div>
+              <div class="candle">
+                <div class="flame" id="flame-3"></div>
+                <div class="smoke" id="smoke-3"></div>
+              </div>
+            </div>
+
+            <!-- Cake Layers -->
+            <div class="cake-tier tier-top">
+              <div class="icing-drops"></div>
+              <div class="strawberry">🍓</div>
+            </div>
+            <div class="cake-tier tier-bottom">
+              <div class="cake-plate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cake-controls mt-4">
+          <button class="romantic-btn primary-glow" id="btn-blow-candles">
+            <span>Blow the Candles ✨</span>
+          </button>
+
+          <button class="romantic-btn primary-glow hidden-animated" id="btn-cut-cake">
+            <span>Cut the Cake 🍰</span>
+          </button>
+
+          <button class="romantic-btn primary-glow hidden-animated" id="btn-to-stage-7">
+            <span>Now we're ready for the REAL surprise... →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 7: HEART BUTTON SURPRISE ================= -->
+    <section id="stage-7" class="stage-section hidden" aria-label="Stage 7: Heartfelt Message">
+      <div class="glass-card text-center heart-stage-card">
+        <div id="heart-prompt-box">
+          <p class="eyebrow">Straight from deep within</p>
+          <h2 class="serif-title">There's something I wanted to say...</h2>
+          <p class="sub-lead">Put your finger or mouse right here</p>
+
+          <div class="heart-pulse-interactive-btn" id="interactive-big-heart" role="button" tabindex="0" aria-label="Touch My Heart">
+            <span class="heart-emoji">❤️</span>
+            <span class="ripple-ring"></span>
+            <span class="ripple-ring delay"></span>
+          </div>
+
+          <p class="caption-hint">Touch My Heart</p>
+        </div>
+
+        <div id="heart-opened-letter" class="hidden-animated heart-letter-container">
+          <div class="gold-sparkle-row">✧ ✦ ✧</div>
+          <h2 class="serif-title highlight-text" id="emotional-name-header">Happy Birthday, Shruti ❤️</h2>
+          
+          <div class="emotional-letter-body" id="emotional-letter-body">
+            <!-- Personalized in script.js -->
+          </div>
+
+          <div class="gold-sparkle-row">✧ ✦ ✧</div>
+
+          <button class="romantic-btn primary-glow mt-4" id="btn-to-stage-8">
+            <span>Wait... There's More?! 🌸</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 8: TOO MANY FLOWERS ================= -->
+    <section id="stage-8" class="stage-section hidden" aria-label="Stage 8: Flower Celebration">
+      <div class="glass-card text-center garden-glow-card">
+        <div class="flower-crown-anim" aria-hidden="true">🌸 🌺 🌷 🌸 🌺</div>
+        <h1 class="grand-bday-title" id="stage-8-title">HAPPY BIRTHDAY, SHRUTI 🎉🌸❤️</h1>
+        
+        <p class="sub-lead highlight-quote cursive-quote">
+          "Today is your day.<br>So smile a little extra. ♡"
+        </p>
+
+        <div class="celebrate-badges">
+          <span class="bubble-tag">✨ Endless Joy</span>
+          <span class="bubble-tag">💐 Soft Blossoms</span>
+          <span class="bubble-tag">🎂 Sweet Wishes</span>
+        </div>
+
+        <div class="stage-8-bottom-actions mt-4">
+          <button class="romantic-btn primary-glow" id="btn-to-stage-9">
+            <span>Next Chapter ✨</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 9: SECRET BUTTON ================= -->
+    <section id="stage-9" class="stage-section hidden" aria-label="Stage 9: Playful Secret">
+      <div class="glass-card text-center playful-card">
+        <div id="stage-9-initial">
+          <p class="eyebrow">Psst... a little warning</p>
+          <h2 class="serif-title">Curiosity is a funny thing...</h2>
+          <p class="sub-lead">Whatever you do, don't tap below.</p>
+          
+          <div class="danger-zone">
+            <button class="danger-playful-btn" id="btn-forbidden">
+              <span>Don't click this... 👀</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="stage-9-revealed" class="hidden-animated">
+          <div class="funny-reaction-emoji">🤭</div>
+          <h2 class="serif-title">Okay... you really clicked it 😂</h2>
+          <p class="sub-lead">I knew you wouldn't be able to resist.</p>
+          <p class="prompt-text">Fine. One last surprise.</p>
+          
+          <button class="romantic-btn primary-glow pulse-btn mt-3" id="btn-to-stage-10">
+            <span>FINAL SURPRISE ✨</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 10: FINAL SURPRISE & BLESSINGS ================= -->
+    <section id="stage-10" class="stage-section hidden" aria-label="Stage 10: Final Grand Wish">
+      <div class="glass-card grand-final-card text-center">
+        <div class="sparkle-badge">✧ Forever & Always ✧</div>
+        
+        <h1 class="serif-title final-title" id="final-bday-title">Happy Birthday, Shruti ❤️</h1>
+        <p class="lead-blessing">May your life always be filled with...</p>
+
+        <!-- One by one reveal container -->
+        <div class="blessings-list" id="blessings-list">
+          <div class="blessing-pill" data-delay="600">
+            <span class="blessing-icon">✨</span>
+            <span class="blessing-text">More smiles</span>
+          </div>
+          <div class="blessing-pill" data-delay="1200">
+            <span class="blessing-icon">🌸</span>
+            <span class="blessing-text">More adventures</span>
+          </div>
+          <div class="blessing-pill" data-delay="1800">
+            <span class="blessing-icon">📸</span>
+            <span class="blessing-text">More beautiful memories</span>
+          </div>
+          <div class="blessing-pill" data-delay="2400">
+            <span class="blessing-icon">💕</span>
+            <span class="blessing-text">More happiness</span>
+          </div>
+          <div class="blessing-pill" data-delay="3000">
+            <span class="blessing-icon">❤️</span>
+            <span class="blessing-text">And lots of love</span>
+          </div>
+        </div>
+
+        <div class="final-closing-note cursive-quote mt-4" id="final-closing-note">
+          "Keep smiling...<br>Because your smile makes the world a little brighter. ♡"
+        </div>
+
+        <div class="made-with-love-pill mt-3">
+          Made with lots of love <span class="beating-heart-inline">❤️</span>
+        </div>
+
+        <div class="restart-experience mt-4">
+          <button class="text-link-btn" id="btn-replay">
+            ↺ Relive the surprise from the start
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Floating Flower Petals Generator Container -->
+  <div id="flower-storm-overlay" class="flower-storm-container" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
